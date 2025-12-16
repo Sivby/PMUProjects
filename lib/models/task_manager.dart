@@ -47,7 +47,7 @@ class TaskManager {
 
       // Проверяем, не просрочена ли задача
       if (task.isOverdue() && task.status == TaskStatus.pending) {
-        print('⚠️  Задача "${task.title}" просрочена!');
+        print('Задача "${task.title}" просрочена!');
       }
     });
 

@@ -1,7 +1,7 @@
 import 'models/task_manager.dart';
 
 void main() async {
-  print('🚀 Запуск менеджера задач...\n');
+  print('Запуск менеджера задач...\n');
 
   // Создаем экземпляр менеджера задач
   final taskManager = TaskManager();
@@ -24,8 +24,8 @@ void main() async {
     taskManager.displayAllTasks();
 
   } catch (error) {
-    print('❌ Произошла ошибка: $error');
+    print('Произошла ошибка: $error');
   }
 
-  print('\n✅ Программа завершена!');
+  print('\nПрограмма завершена!');
 }
