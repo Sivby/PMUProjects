@@ -1,31 +1,67 @@
-import 'models/task_manager.dart';
+import 'package:flutter/material.dart';
 
-void main() async {
-  print('🚀 Запуск менеджера задач...\n');
+void main() {
+  runApp(const MyApp());
+}
 
-  // Создаем экземпляр менеджера задач
-  final taskManager = TaskManager();
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
-  try {
-    // Используем Future для асинхронной загрузки
-    await taskManager.loadTasks();
+    @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+                                                                                                                                colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+      ),
+      home: const MyHomePage(title: 'Суслин В.С. ПИбд-33'),
+    );
+  }
+}
 
-    // Используем различные методы
-    taskManager.displayAllTasks();
-    taskManager.processTasks();
-    taskManager.analyzeTasks();
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key, required this.title});
 
-    // Используем еще один Future
-    print('\n=== ВЫПОЛНЕНИЕ ЗАДАЧИ ===');
-    await taskManager.completeFirstTask();
 
-    // Показываем обновленный статус
-    print('\n=== ОБНОВЛЕННЫЙ СПИСОК ===');
-    taskManager.displayAllTasks();
 
-  } catch (error) {
-    print('❌ Произошла ошибка: $error');
+  final String title;
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  int _counter = 0;
+
+  void _incrementCounter() {
+    setState(() {
+                                    _counter++;
+    });
   }
 
-  print('\n✅ Программа завершена!');
+  @override
+  Widget build(BuildContext context) {
+                            return Scaffold(
+      appBar: AppBar(
+                                backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+                        title: Text(widget.title),
+      ),
+      body: Center(
+                        child: Column(
+                                                                                                                                            mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Text('You have pushed the button this many times:'),
+            Text(
+              '$_counter',
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _incrementCounter,
+        tooltip: 'Increment',
+        child: const Icon(Icons.add),
+      ),     );
+  }
 }
