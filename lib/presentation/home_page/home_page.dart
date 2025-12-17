@@ -1,3 +1,5 @@
+import 'package:flatter_test_app/data/repositories/mock_repository.dart';
+import 'package:flatter_test_app/data/repositories/potter_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flatter_test_app/domain/models/card.dart';
@@ -29,46 +31,31 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-
-
-
 class Body extends StatelessWidget {
   const Body({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final data = [
-      CardData(
-        'Спиннер',
-        descriptionText: 'Ух-ты',
-        imageUrl: 'https://pokupaylegko.ru/upload/shop_1/1/7/4/item_17447/shop_items_catalog_image17447.jpeg',
-      ),
-      CardData(
-        'Попит',
-        descriptionText: 'Вау',
-        icon: Icons.hail,
-        imageUrl: 'https://ir.ozone.ru/s3/multimedia-1/c1000/6049557961.jpg',
-      ),
-      CardData(
-        'Сквиш',
-        descriptionText: 'Ну ничего себе',
-        icon: Icons.games,
-        imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPB4indgsrpoDTjQTwiNIvxuNYL5pqLCAHfA&s',
-      ),
-    ];
+    final data = PotterRepository().loadData();
     return Center(
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: data.map((data) {
-            return _Card.fromData(
-              data,
-              onLike: (String title, bool isLiked) =>
-                  _showSnackBar(context, title, isLiked),
-              onTap: () => _navToDetails(context, data),
-            );
-          }).toList(),
-        ),
+      child: FutureBuilder<List<CardData>?>(
+          future: data,
+          builder: (context, snapshot) => SingleChildScrollView(
+            child: snapshot.hasData
+              ? Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: snapshot.data?.map((data) {
+                      return _Card.fromData(
+                        data,
+                        onLike: (String title, bool isLiked) =>
+                            _showSnackBar(context, title, isLiked),
+                        onTap: () => _navToDetails(context, data),
+                      );
+                  }).toList() ??
+                [],
+            )
+            : const CircularProgressIndicator(),
+          ),
       ),
     );
   }
@@ -85,10 +72,7 @@ class Body extends StatelessWidget {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
           'Игрушка $title ${isLiked ? 'liked!' : 'disliked :('}',
-          style: Theme
-              .of(context)
-              .textTheme
-              .bodyLarge,
+          style: Theme.of(context).textTheme.bodyLarge,
         ),
         backgroundColor: Colors.orangeAccent,
         duration: const Duration(seconds: 1),
@@ -96,5 +80,3 @@ class Body extends StatelessWidget {
     });
   }
 }
-
-
