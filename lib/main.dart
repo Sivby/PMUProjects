@@ -7,12 +7,12 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-    @override
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-                                                                                                                                colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
       home: const MyHomePage(title: 'Суслин В.С. ПИбд-33'),
     );
@@ -31,37 +31,151 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
 
-  void _incrementCounter() {
-    setState(() {
-                                    _counter++;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
-                            return Scaffold(
+    return Scaffold(
       appBar: AppBar(
-                                backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-                        title: Text(widget.title),
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: Text(widget.title),
       ),
-      body: Center(
-                        child: Column(
-                                                                                                                                            mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
+      body: const MyWidget(),
+           );
+  }
+}
+
+
+class _CardData {
+  final String text;
+  final String descriptionText;
+  final IconData icon;
+  final String? imageUrl;
+
+  _CardData(
+      this.text, {
+      this.icon = Icons.access_alarms_outlined,
+      required this.descriptionText,
+      this.imageUrl,
+  });
+}
+
+class MyWidget extends StatelessWidget {
+  const MyWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final data = [
+      _CardData(
+        'Спиннер',
+        descriptionText: 'Ух-ты',
+        imageUrl: 'https://pokupaylegko.ru/upload/shop_1/1/7/4/item_17447/shop_items_catalog_image17447.jpeg',
+      ),
+      _CardData(
+        'Попит',
+        descriptionText: 'Вау',
+        icon: Icons.hail,
+        imageUrl: 'https://ir.ozone.ru/s3/multimedia-1/c1000/6049557961.jpg',
+      ),
+      _CardData(
+        'Сквиш',
+        descriptionText: 'Ну ничего себе',
+        icon: Icons.games,
+        imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPB4indgsrpoDTjQTwiNIvxuNYL5pqLCAHfA&s',
+      ),
+    ];
+    return Center(
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: data.map((e) => _Card.fromData(e)).toList(),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),     );
+    );
+  }
+}
+
+class _Card extends StatelessWidget {
+  final String text;
+  final String descriptionText;
+  final IconData icon;
+  final String? imageUrl;
+
+
+  const _Card(
+      this.text, {
+      this.icon = Icons.access_alarm_outlined,
+      required this.descriptionText,
+      this.imageUrl,
+  });
+
+  factory _Card.fromData(_CardData data) => _Card(
+      data.text,
+      descriptionText: data.descriptionText,
+      icon: data.icon,
+      imageUrl: data.imageUrl,
+    );
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(top: 16),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white70,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: Colors.grey,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey,
+            spreadRadius: 4,
+            offset: const Offset(0, 5),
+            blurRadius: 8,
+          ),
+        ],
+      ),
+
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: SizedBox(
+              height: 140,
+              width: 100,
+              child: Image.network(imageUrl ?? '',
+              fit: BoxFit.cover,
+              errorBuilder: (_, __, ___) => const Placeholder(),
+              ),
+            ),
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    text,
+                    style: Theme.of(context).textTheme.headlineLarge,
+                  ),
+                  Text(
+                    descriptionText,
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Icon(icon),
+          ),
+        ],
+      ),
+    );
   }
 }
