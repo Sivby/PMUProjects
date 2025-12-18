@@ -3,7 +3,7 @@ import 'package:flatter_test_app/domain/models/card.dart';
 import 'package:flatter_test_app/domain/models/home.dart';
 
 const _imagePlaceholder =
-    'https://upload.wikimedia.org/wikipedia/en/archive/b/b1/20210811082420%21Portrait_placeholder.png';
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-vhbgwbZT_5KkQS5-eD_21HzhgIiTDt80Jw&s';
 
 extension CharactersDtoToModel on CharactersDto {
   HomeData toDomain() => HomeData(
