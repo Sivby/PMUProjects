@@ -4,7 +4,7 @@ import 'package:flatter_test_app/domain/models/card.dart';
 
 class MockRepository extends ApiInterface {
   @override
-  Future<List<CardData>?> loadData() async {
+  Future<List<CardData>?> loadData({OnErrorCallback? onError}) async {
     return [
       CardData(
         'Спиннер',

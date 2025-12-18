@@ -15,17 +15,20 @@ class PotterRepository extends ApiInterface {
   static const String _baseUrl = 'https://api.potterdb.com';
 
   @override
-  Future<List<CardData>?> loadData() async {
+  Future<List<CardData>?> loadData({String? q, OnErrorCallback? onError}) async {
     try {
       const String url = '$_baseUrl/v1/characters';
 
-      final Response<dynamic> response = await _dio.get<Map<dynamic, dynamic>>(url);
+      final Response<dynamic> response = await _dio.get<Map<dynamic, dynamic>>(
+        url,
+        queryParameters: q != null ? {'filter[name_cont]': q} : null,
+      );
 
       final CharactersDto dto = CharactersDto.fromJson(response.data as Map<String, dynamic>);
       final List<CardData>? data = dto.data?.map((e) => e.toDomain()).toList();
       return data;
     } on DioException catch (e) {
-      //todo
+      onError?.call(e.response?.statusMessage);
       return null;
     }
   }

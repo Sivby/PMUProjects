@@ -21,42 +21,75 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: _color,
-        title: Text(widget.title),
-      ),
-      body: const Body(),
+    return const Scaffold(
+      body: Center(child: Body()),
     );
   }
 }
 
-class Body extends StatelessWidget {
+class Body extends StatefulWidget {
   const Body({super.key});
 
   @override
+  State<Body> createState() => _BodyState();
+}
+
+class _BodyState extends State<Body> {
+
+  final searchController = TextEditingController();
+  late Future<List<CardData>?> data;
+
+  final repo = PotterRepository();
+
+  @override
+  void initState() {
+    data = repo.loadData();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final data = PotterRepository().loadData();
-    return Center(
+    return Padding(
+        padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+        child: Column(
+          children: [
+            Padding(
+                padding: const EdgeInsets.all(12),
+                child: CupertinoSearchTextField(
+                  controller: searchController,
+                  onSubmitted: (search) {
+                    setState(() {
+                      data = PotterRepository().loadData(q: search);
+                    });
+                  },
+                )
+            ),
+    Expanded(
+      child: Center(
       child: FutureBuilder<List<CardData>?>(
-          future: data,
-          builder: (context, snapshot) => SingleChildScrollView(
-            child: snapshot.hasData
-              ? Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: snapshot.data?.map((data) {
-                      return _Card.fromData(
-                        data,
-                        onLike: (String title, bool isLiked) =>
-                            _showSnackBar(context, title, isLiked),
-                        onTap: () => _navToDetails(context, data),
-                      );
-                  }).toList() ??
-                [],
-            )
+      future: data,
+      builder: (context, snapshot) => SingleChildScrollView(
+        child: snapshot.hasData
+            ? Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: snapshot.data?.map((data) {
+            return _Card.fromData(
+              data,
+              onLike: (String title, bool isLiked) =>
+                  _showSnackBar(context, title, isLiked),
+              onTap: () => _navToDetails(context, data),
+            );
+          }).toList() ??
+              [],
+        )
             : const CircularProgressIndicator(),
-          ),
       ),
+    ),
+    ),
+    ),
+    ],
+    )
+
     );
   }
 
@@ -71,7 +104,7 @@ class Body extends StatelessWidget {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
-          'Игрушка $title ${isLiked ? 'liked!' : 'disliked :('}',
+          'Character $title ${isLiked ? 'liked!' : 'disliked :('}',
           style: Theme.of(context).textTheme.bodyLarge,
         ),
         backgroundColor: Colors.orangeAccent,

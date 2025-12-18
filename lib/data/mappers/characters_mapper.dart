@@ -2,12 +2,22 @@ import 'package:flatter_test_app/data/dtos/characters_dto.dart';
 import 'package:flatter_test_app/domain/models/card.dart';
 
 const _imagePlaceholder =
-    'https://upload.wikimedia.org/wikipedia/en/archive/b/b1/20210811082420%21Portrait_placeholder.png';
+    'https://thumbs.dreamstime.com/b/missing-person-poster-16343674.jpg';
 
 extension CharacterDataDtoToModel on CharacterDataDto {
   CardData toDomain() => CardData(
     attributes?.name ?? 'UNKNOWN',
     imageUrl: attributes?.image ?? _imagePlaceholder,
-    descriptionText: '${attributes?.born} - ${attributes?.died}',
+    descriptionText: _makeDescriptionText(attributes?.born, attributes?.died),
   );
+
+  String _makeDescriptionText(String? born, String? died) {
+    return born != null && died != null
+        ? '$born - $died'
+        : born != null
+        ? 'born: $born'
+        : died != null
+        ? 'died: $died'
+        : '';
+  }
 }
