@@ -1,7 +1,7 @@
-import 'package:flatter_test_app/domain/models/card.dart';
+import 'package:flatter_test_app/domain/models/home.dart';
 
 typedef OnErrorCallback = void Function(String? error);
 
 abstract class ApiInterface {
-  Future<List<CardData>?> loadData({OnErrorCallback? onError});
+  Future<HomeData?> loadData({OnErrorCallback? onError});
 }

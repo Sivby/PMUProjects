@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flatter_test_app/data/repositories/api_interface.dart';
 import 'package:flatter_test_app/domain/models/card.dart';
+import 'package:flatter_test_app/domain/models/home.dart';
 
 class MockRepository extends ApiInterface {
   @override
